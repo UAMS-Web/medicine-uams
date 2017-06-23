@@ -1,6 +1,6 @@
 <header class="uams-thinstrip">
   <div id="top-header">
-  	<a href="http://www.uams.edu" title="University of Arkansas for Medical Sciences Home" class="uams-patch">University of Arkansas for Medical Scineces</a>
+  	<a href="http://www.uams.edu" title="University of Arkansas for Medical Sciences Home" class="uams-patch">University of Arkansas for Medical Sciences</a>
   </div>
   <div class="container">
 	<div id="site-title">
