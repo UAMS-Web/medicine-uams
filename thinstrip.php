@@ -4,7 +4,7 @@
   </div>
   <div class="container">
 	<div id="site-title">
-		<h1 class="vertical-align"><span class="com-site-title">College of Medicine<br/></span><?php uams_site_title(); ?></h1>
+		<h1 class="vertical-align"><?php echo '<a href="' . home_url('/') . '" title="' . esc_attr( str_replace('   ', ' ', get_bloginfo()) ) . '" tabindex="-1" aria-hidden="true" class="uams-site-title">'; ?>UAMS<span class="news-site-title">news</span></a></h1>
     </div>
   </div>
   <div class='align-right thin-nav'>
