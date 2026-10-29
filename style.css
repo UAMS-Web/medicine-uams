@@ -42,4 +42,8 @@ Version: 1.0
 	.com-site-title {
 		font-size: 18px;
 	}
+	#ham:before {
+		font-size: 25px;
+		margin: -7px 0;
+	}
 }
