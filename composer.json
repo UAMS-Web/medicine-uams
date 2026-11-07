@@ -1,0 +1,13 @@
+{
+    "name": "uams-web/medicine-uams",
+    "description": "UAMS College of Medicine WordPress child theme of uams-2016.",
+    "type": "wordpress-theme",
+    "require": {
+        "php": ">=8.2"
+    },
+    "config": {
+        "platform": {
+            "php": "8.4.27"
+        }
+    }
+}
