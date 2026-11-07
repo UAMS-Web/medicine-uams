@@ -1,0 +1,48 @@
+name: CI
+
+# Syntax checks for the shipped PHP. `lint` runs on the development PHP and
+# `lint-floor` runs the same `php -l` on the supported floor, PHP 8.2, so a
+# shipped file using newer syntax fails. `tests/` and `vendor/` are left out:
+# the suite runs only on the development PHP. The final `CI` job needs every
+# other job; update `needs:` in the same change that adds or removes a job.
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
+        with:
+          php-version: '8.4'
+      - name: Parse every shipped PHP file
+        run: find . -name '*.php' -not -path './vendor/*' -not -path './tests/*' -print0 | xargs -0 -n1 php -l
+
+  lint-floor:
+    name: lint-floor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
+        with:
+          php-version: '8.2'
+      - name: Parse every shipped PHP file on the floor PHP
+        run: find . -name '*.php' -not -path './vendor/*' -not -path './tests/*' -print0 | xargs -0 -n1 php -l
+
+  ci:
+    name: CI
+    if: always()
+    needs: [lint, lint-floor]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail unless every job succeeded
+        run: |
+          test "${{ needs.lint.result }}" = success && test "${{ needs.lint-floor.result }}" = success
