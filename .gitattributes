@@ -10,3 +10,12 @@
 # may add more specific lines under this (diff drivers, `export-ignore`,
 # `merge=union` for an append-only decision log); keep this line first.
 * text=auto eol=lf
+
+# Keep the GitHub download to what the theme runs (keep-the-download-to-what-runs rule):
+# exclude every top-level entry, then put each runtime path back.
+/* export-ignore
+/.* export-ignore
+/style.css -export-ignore
+/functions.php -export-ignore
+/thinstrip.php -export-ignore
+/screenshot.png -export-ignore
