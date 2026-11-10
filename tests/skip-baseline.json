@@ -1,0 +1,8 @@
+{
+    "bands": {
+        "suite": {
+            "expected": 0,
+            "why": "The unit suite skips nothing."
+        }
+    }
+}

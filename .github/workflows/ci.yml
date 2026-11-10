@@ -1,48 +1,86 @@
 name: CI
 
-# Syntax checks for the shipped PHP. `lint` runs on the development PHP and
-# `lint-floor` runs the same `php -l` on the supported floor, PHP 8.2, so a
-# shipped file using newer syntax fails. `tests/` and `vendor/` are left out:
-# the suite runs only on the development PHP. The final `CI` job needs every
-# other job; update `needs:` in the same change that adds or removes a job.
+# Calls the shared job chain in UAMS-Web/uams-ci-workflows and adds the one job a
+# ruleset requires, `CI`.
+#
+# - `uses:` names a release tag of UAMS-Web/uams-ci-workflows, never a branch, so a change
+#   to the shared chain reaches this repository only when the tag here moves.
+# - The called jobs check out this repository, so it carries `.github/actions/setup`, the
+#   synced `.claude/skills` scripts, the Composer scripts `test:pint`, `test:refactor`,
+#   `stan` and `test`, and `tests/skip-baseline.json` for the Pest job.
+# - The chain's `floor-lint` job replaces the earlier private `lint` and `lint-floor` jobs:
+#   it parses every shipped PHP file under PHP 8.2, the supported floor, with the same
+#   `find` and `php -l` command (`tests/` and `vendor/` left out). The development PHP is
+#   parsed by every other job.
+# - Mutation is off (`mutate: false`) until its own ticket turns it on after coverage.
+# - The repository is public, so no job is gated on `RUN_REMOTE_CI`.
+#
+# The last job, `CI`, is the one check a ruleset requires from this workflow (with the two
+# pull-request-body checks, `Attribution footer` and `Closing keywords`). It `needs:` the call,
+# runs `if: always()`, and fails unless the call reports `success`: a `skipped` or `cancelled`
+# call fails it. The called workflow ends in a `Chain result` job that needs every job in the
+# chain, so the call is `success` only when every job in it succeeded. A ruleset therefore never
+# lists a job by name, and the chain can gain or lose a job without a ruleset change. Do not
+# rename `CI`, and do not rename the `checks` job without changing `needs:` below.
 
 on:
   pull_request:
   push:
     branches: [master]
+  # Lets the workflow be run on demand against a branch.
+  workflow_dispatch:
+  # The mutate job mutates only the changed files on a pull request and on a push, and everything on a scheduled
+  # or manual run, under the `mutate-full-timeout-minutes` input (default 180). To catch drift from a dependency
+  # or tooling change, uncomment a schedule (UAMS-Web/uams-claude-skills#532). A schedule runs on the default
+  # branch, and GitHub disables it after 60 days without repository activity.
+  # schedule:
+  #   - cron: '17 7 * * 1'
+
+# A new push to a pull request cancels that pull request's stale run, so a pull request keeps
+# one group. Every other run (a push to the default branch, a manual run) gets a group of its
+# own, keyed on the commit, so a later push never cancels it. A shared push group would: GitHub
+# keeps one running and one pending run per group and cancels the pending one when another is
+# queued, whatever `cancel-in-progress` says, so a merge landing during a long run would cancel
+# the previous merge's run before it started a job. Its commit would show a short, settled run
+# and the chain would never have run on it.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
 
 jobs:
-  lint:
-    name: lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
-        with:
-          php-version: '8.4'
-      - name: Parse every shipped PHP file
-        run: find . -name '*.php' -not -path './vendor/*' -not -path './tests/*' -print0 | xargs -0 -n1 php -l
+  # The shared chain. Its checks report as `checks / <job name> (<operating system>)`.
+  checks:
+    uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@v0.9.0
+    with:
+      linux-only: true
+      mutate: false
+      floor-lint: true
+      floor-lint-php: '8.2'
+      floor-lint-command: find . -name '*.php' -not -path './vendor/*' -not -path './tests/*' -print0 | xargs -0 -n1 php -l
 
-  lint-floor:
-    name: lint-floor
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
-        with:
-          php-version: '8.2'
-      - name: Parse every shipped PHP file on the floor PHP
-        run: find . -name '*.php' -not -path './vendor/*' -not -path './tests/*' -print0 | xargs -0 -n1 php -l
-
+  # The one check a ruleset requires from this workflow. Keep `needs:` naming the call;
+  # scripts/check-templates.mjs in UAMS-Web/uams-claude-skills checks it.
   ci:
     name: CI
+    needs: [checks]
     if: always()
-    needs: [lint, lint-floor]
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Fail unless every job succeeded
+      # `skipped` and `cancelled` fail as well as `failure`: a call that did not run proved nothing.
+      - name: Every needed job succeeded
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
         run: |
-          test "${{ needs.lint.result }}" = success && test "${{ needs.lint-floor.result }}" = success
+          echo "Needed job results: $RESULTS"
+          # An empty list (an emptied `needs:`, a dropped `env:`) would run no iterations and pass having read nothing.
+          if [ -z "$RESULTS" ]; then echo "::error::No needed job results to read"; exit 1; fi
+          for result in $RESULTS; do
+            if [ "$result" != "success" ]; then
+              echo "::error::A needed job reported $result"
+              exit 1
+            fi
+          done
