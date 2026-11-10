@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 use Brain\Monkey\Functions;
 
+use function Brain\Monkey\Functions\when;
+
 function render_thinstrip(): string
 {
     ob_start();
@@ -34,14 +36,14 @@ it('prints the site title from the parent theme once, after the college name', f
 });
 
 it('prints the quick links toggle button', function (): void {
-    Functions\when('uams_site_title')->justReturn(null);
+    when('uams_site_title')->justReturn();
 
     expect(render_thinstrip())
         ->toContain("<button class='uams-quicklinks' aria-haspopup='true' aria-expanded=\"false\" aria-label=\"Open quick links\">Quick Links");
 });
 
 it('prints exactly the markup it printed when it was pinned', function (): void {
-    Functions\when('uams_site_title')->alias(static function (): void {
+    when('uams_site_title')->alias(static function (): void {
         echo 'Test Site';
     });
 
