@@ -9,7 +9,7 @@ add_filter('_includes/acf-pro/settings/show_admin', '__return_true');
 
 add_action('acf/input/admin_head', 'my_acf_admin_head');
 
-function my_acf_admin_head()
+function my_acf_admin_head(): void
 {
 
     ?>
