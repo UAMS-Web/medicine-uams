@@ -12,6 +12,8 @@ name: CI
 #   it parses every shipped PHP file under PHP 8.2, the supported floor, with the same
 #   `find` and `php -l` command (`tests/` and `vendor/` left out). The development PHP is
 #   parsed by every other job.
+# - The chain's `download-archive` job checks that the GitHub download holds only what the
+#   theme runs, against the keep-list in `.gitattributes`.
 # - Mutation is off (`mutate: false`) until its own ticket turns it on after coverage.
 # - The repository is public, so no job is gated on `RUN_REMOTE_CI`.
 #
@@ -60,6 +62,8 @@ jobs:
       floor-lint: true
       floor-lint-php: '8.2'
       floor-lint-command: find . -name '*.php' -not -path './vendor/*' -not -path './tests/*' -print0 | xargs -0 -n1 php -l
+      download-archive: true
+      download-archive-command: node .claude/skills/download-archive-check/check-download-archive.mjs
 
   # The one check a ruleset requires from this workflow. Keep `needs:` naming the call;
   # scripts/check-templates.mjs in UAMS-Web/uams-claude-skills checks it.
