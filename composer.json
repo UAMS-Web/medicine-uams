@@ -8,6 +8,20 @@
     "config": {
         "platform": {
             "php": "8.4.27"
+        },
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
+    },
+    "require-dev": {
+        "brain/monkey": "^2.7",
+        "pestphp/pest": "^5.3"
+    },
+    "scripts": {
+        "test": "pest"
+    },
+    "scripts-descriptions": {
+        "test": "Run the Pest unit suite: no WordPress, no database, WordPress functions mocked with Brain Monkey."
     }
 }
