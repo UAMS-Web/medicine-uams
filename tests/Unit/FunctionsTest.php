@@ -3,17 +3,48 @@
 /**
  * my_acf_admin_head(), the ACF admin head callback in functions.php.
  *
- * Pins the markup it prints today. The filter and action functions.php
- * registers at file scope are not asserted here: the bootstrap loads the file
- * once and discards its registrations, so registration needs a test that boots
- * WordPress.
+ * Pins the markup it prints today, and the filter and action functions.php
+ * registers at file scope.
+ *
+ * The file is loaded by the first test that needs it, inside that test's Brain
+ * Monkey session, so its file-scope lines run under a test and mutation
+ * testing can reach them. It declares a function, so it can load only once per
+ * process; what that load registered is kept and read by the registration
+ * test, which is first in the file so that it is the test that loads it.
  *
  * @see functions.php
  */
 
 declare(strict_types=1);
 
+/**
+ * Load functions.php once, and return the priorities its file scope registered.
+ *
+ * @return array{filter: int|false, action: int|false}
+ */
+function load_functions_file(): array
+{
+    static $registered = null;
+
+    if ($registered === null) {
+        require_once dirname(__DIR__, 2).'/functions.php';
+
+        $registered = [
+            'filter' => has_filter('_includes/acf-pro/settings/show_admin', '__return_true'),
+            'action' => has_action('acf/input/admin_head', 'my_acf_admin_head'),
+        ];
+    }
+
+    return $registered;
+}
+
+it('registers the ACF settings filter and the admin head action at the default priority', function (): void {
+    expect(load_functions_file())->toBe(['filter' => 10, 'action' => 10]);
+});
+
 it('prints the script that moves the post editor into the ACF field', function (): void {
+    load_functions_file();
+
     ob_start();
     my_acf_admin_head();
     $output = (string) ob_get_clean();
@@ -25,6 +56,8 @@ it('prints the script that moves the post editor into the ACF field', function (
 });
 
 it('prints the style that clears the editor toolbar background', function (): void {
+    load_functions_file();
+
     ob_start();
     my_acf_admin_head();
     $output = (string) ob_get_clean();
@@ -37,6 +70,8 @@ it('prints the style that clears the editor toolbar background', function (): vo
 });
 
 it('prints exactly the markup it printed when it was pinned', function (): void {
+    load_functions_file();
+
     ob_start();
     my_acf_admin_head();
 
