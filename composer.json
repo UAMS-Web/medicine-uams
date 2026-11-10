@@ -25,6 +25,7 @@
     },
     "scripts": {
         "test": "pest",
+        "mutate": "pest tests/Unit/FunctionsTest.php tests/Unit/ThinstripTest.php --mutate --path=functions.php,thinstrip.php",
         "stan": "phpstan analyse --no-progress --memory-limit=2G",
         "pint": "pint",
         "refactor": "rector",
@@ -35,6 +36,7 @@
     },
     "scripts-descriptions": {
         "test": "Run the Pest unit suite: no WordPress, no database, WordPress functions mocked with Brain Monkey.",
+        "mutate": "Run Pest mutation testing over functions.php and thinstrip.php, naming the test files so the Patchwork bootstrap does not break the mutant children.",
         "stan": "Run PHPStan.",
         "pint": "Format first-party PHP with Pint.",
         "refactor": "Apply Rector's gating profile.",

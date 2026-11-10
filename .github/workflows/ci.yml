@@ -14,7 +14,10 @@ name: CI
 #   parsed by every other job.
 # - The chain's `download-archive` job checks that the GitHub download holds only what the
 #   theme runs, against the keep-list in `.gitattributes`.
-# - Mutation is off (`mutate: false`) until its own ticket turns it on after coverage.
+# - The chain's `mutate` job runs on by default. `mutate-paths` names the first-party PHP files, and
+#   `composer mutate` names the Unit test files, because the Unit bootstrap loads Patchwork and a
+#   child that scans `tests/Unit` for tests dies and is scored as a kill. `mutate-ignore-paths` is left
+#   at its default: it takes directories, not files.
 # - The repository is public, so no job is gated on `RUN_REMOTE_CI`.
 #
 # The last job, `CI`, is the one check a ruleset requires from this workflow (with the two
@@ -58,7 +61,7 @@ jobs:
     uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@v0.9.0
     with:
       linux-only: true
-      mutate: false
+      mutate-paths: functions.php thinstrip.php
       floor-lint: true
       floor-lint-php: '8.2'
       floor-lint-command: find . -name '*.php' -not -path './vendor/*' -not -path './tests/*' -print0 | xargs -0 -n1 php -l
