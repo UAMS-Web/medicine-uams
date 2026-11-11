@@ -27,7 +27,7 @@ parameters:
         max: 80400
 
     # Starting level; raised one level per change as findings are fixed.
-    level: 3
+    level: 4
 
     # First-party PHP: the two theme files at the root and the unit tests.
     paths:
