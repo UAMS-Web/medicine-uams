@@ -27,7 +27,7 @@ parameters:
         max: 80400
 
     # Starting level; raised one level per change as findings are fixed.
-    level: 1
+    level: 2
 
     # First-party PHP: the two theme files at the root and the unit tests.
     paths:
@@ -162,8 +162,8 @@ parameters:
             reportUnmatched: false
         # Pest routes its public API through classes it tags @internal;
         # calling them from a test is Pest's intended use.
-        # -
-        #     identifier: method.internalClass
-        #     message: '#of internal class Pest\\#'
-        #     path: tests
-        #     reportUnmatched: false
+        -
+            identifier: method.internalClass
+            message: '#of internal class Pest\\#'
+            path: tests
+            reportUnmatched: false
