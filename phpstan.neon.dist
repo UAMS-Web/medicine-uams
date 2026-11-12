@@ -27,7 +27,7 @@ parameters:
         max: 80400
 
     # Starting level; raised one level per change as findings are fixed.
-    level: 9
+    level: 10
 
     # First-party PHP: the two theme files at the root and the unit tests.
     paths:
@@ -153,13 +153,6 @@ parameters:
         # at level 0. The Integration suite is class-based PHPUnit 9.6 and
         # needs no entry of its own.
         #
-        # `$this` inside a closure passed to `uses()->beforeEach()` /
-        # `afterEach()` is bound by Pest at runtime, which PHPStan cannot see.
-        -
-            identifier: variable.undefined
-            message: '#^Undefined variable: \$this$#'
-            path: tests/Pest.php
-            reportUnmatched: false
         # Pest routes its public API through classes it tags @internal;
         # calling them from a test is Pest's intended use.
         -

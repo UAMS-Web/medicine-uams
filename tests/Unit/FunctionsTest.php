@@ -24,6 +24,7 @@ declare(strict_types=1);
  */
 function load_functions_file(): array
 {
+    /** @var array{filter: int|false, action: int|false}|null $registered */
     static $registered = null;
 
     if ($registered === null) {
