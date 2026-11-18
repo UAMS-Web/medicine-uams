@@ -22,6 +22,6 @@ Written against v1.0.2.
 
 ## The post editor sits above the ACF fields instead of inside one
 
-**Cause:** the script `my_acf_admin_head()` prints moves the editor only into a field matched by `.acf-field-573f70ac9357c .acf-input`. On a screen without that field, or where the field's wrapper does not carry that class, it moves nothing.
+**Cause:** the script `my_acf_admin_head()` prints moves the editor only into a field matched by `.acf-field-573f70ac9357c .acf-input`. The likely cause is that the selector does not match: the bundled ACF 5.9.9 writes the wrapper class with the full field key, normally `acf-field-field_573f70ac9357c`. On a screen without that field, it moves nothing either.
 
-**Fix:** none in the theme for other screens: the move is meant for that one field. If the field is on the screen and the editor still does not move, check the class on the field's wrapper in the browser's inspector against the selector, and [open an issue](https://github.com/UAMS-Web/medicine-uams/issues) with what it shows. See [What the theme changes](What-the-theme-changes.md#the-acf-editor-change-functionsphp).
+**Fix:** with the field on the screen, compare the class on the field's wrapper in the browser's inspector with the selector, and [open an issue](https://github.com/UAMS-Web/medicine-uams/issues) with what it shows. See [What the theme changes](What-the-theme-changes.md#the-acf-editor-change-functionsphp).

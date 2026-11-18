@@ -35,12 +35,12 @@ The theme header names the parent (`Template: uams-2016`), the minimum WordPress
 
 ## The ACF editor change (`functions.php`)
 
-`my_acf_admin_head()` runs on ACF's `acf/input/admin_head` action, so it runs only on admin screens where ACF draws fields. It prints:
+`my_acf_admin_head()` runs on ACF's `acf/input/admin_head` action, which ACF fires wherever it prints its input scripts. Neither this theme nor the parent calls `acf_form()` on the front end, so in practice that is the admin screens where ACF draws fields. It prints:
 
-- **a script** that moves the post editor (`#postdivrich`) into the input area of the field matched by the selector `.acf-field-573f70ac9357c .acf-input`, so the editor appears inside that field rather than above the field groups;
+- **a script** that moves the post editor (`#postdivrich`) into the input area of the field matched by the selector `.acf-field-573f70ac9357c .acf-input`, so the editor would appear inside that field rather than above the field groups;
 - **a style** that removes the editor toolbar's background and top padding inside a field.
 
-On a screen where nothing matches that selector, the script finds nothing to move and does nothing.
+**Note:** the ACF the parent bundles (5.9.9) writes a field wrapper's class as `acf-field-` followed by the full field key, and field keys normally begin with `field_`, so the field's wrapper would carry `acf-field-field_573f70ac9357c`. The selector then matches only if the stored key has no `field_` prefix. Where nothing matches, the script finds nothing to move and does nothing. This has not been checked on a running site.
 
 ## The filter that has no effect
 

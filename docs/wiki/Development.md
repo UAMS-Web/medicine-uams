@@ -35,7 +35,7 @@ Before changing code that has no test, add one that captures what it does now; t
 
 ## Checks on a pull request
 
-The `CI` workflow calls the shared job chain in [`UAMS-Web/uams-ci-workflows`](https://github.com/UAMS-Web/uams-ci-workflows) at a release tag. The chain runs Pest, mutation testing on the changed files, PHPStan, Pint, Rector, a PHP 8.2 parse of every shipped PHP file, the download-archive check and the checks on the synced agent files. Its last job, `CI`, passes only when every job in the chain succeeded, and it is the check `master` requires, together with `Attribution footer` and `Closing keywords` on the pull request body.
+The `CI` workflow calls the shared job chain in [`UAMS-Web/uams-ci-workflows`](https://github.com/UAMS-Web/uams-ci-workflows) at a release tag. The chain's jobs include Pest, mutation testing on the changed files, PHPStan, Pint, Rector, a PHP 8.2 parse of every shipped PHP file, Composer validation, the download-archive check and the checks on the synced agent files. This repository's own `CI` job passes only when the whole chain succeeded, and it is the check `master` requires, together with `Attribution footer` and `Closing keywords` on the pull request body.
 
 A full mutation run also runs weekly on a schedule.
 
