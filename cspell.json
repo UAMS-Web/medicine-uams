@@ -1,0 +1,13 @@
+// Spell check configuration for this repository's own prose (UAMS-Web/medicine-uams#63).
+// Every entry in "words" is a name that cannot be reworded, per the american-english-prose rule:
+//   uams, UAMS     the organization, and the `uams-2016` parent theme's folder name
+//   Snoqualmie     the theme's display name, from the `Theme Name` header in style.css
+//   thinstrip      the header partial's file name, `thinstrip.php`
+//   postdivrich    the WordPress post editor's element id, `#postdivrich`
+//   phpstan        the tool and its configuration file, `phpstan.neon.dist`
+{
+  "version": "0.2",
+  "language": "en-US",
+  "words": ["phpstan", "postdivrich", "Snoqualmie", "thinstrip", "uams"],
+  "ignorePaths": ["vendor/**", "composer.lock", ".claude/**", ".agents/**", ".cursor/**"]
+}
