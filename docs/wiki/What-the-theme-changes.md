@@ -8,7 +8,7 @@ Written against v1.0.2.
 | --- | --- | --- |
 | `style.css` | The theme header, and the style overrides for the site title | Enqueued by the parent as `uams-style`, after the parent's own stylesheet |
 | `thinstrip.php` | The header strip at the top of every page | Replaces the parent's `thinstrip.php`, which the parent's `header.php` loads with `get_template_part( 'thinstrip' )` |
-| `functions.php` | One ACF editor-screen change, and one filter that has no effect | Loaded by WordPress before the parent's `functions.php` |
+| `functions.php` | One ACF editor-screen change | Loaded by WordPress before the parent's `functions.php` |
 | `screenshot.png` | The image shown on *Appearance*, *Themes* | Read by WordPress |
 
 ## The header strip (`thinstrip.php`)
@@ -41,7 +41,3 @@ The theme header names the parent (`Template: uams-2016`), the minimum WordPress
 - **a style** that removes the editor toolbar's background and top padding inside a field.
 
 **Note:** the ACF the parent bundles (5.9.9) writes a field wrapper's class as `acf-field-` followed by the full field key, and field keys normally begin with `field_`, so the field's wrapper would carry `acf-field-field_573f70ac9357c`. The selector then matches only if the stored key has no `field_` prefix. Where nothing matches, the script finds nothing to move and does nothing. This has not been checked on a running site.
-
-## The filter that has no effect
-
-`functions.php` also registers `__return_true` on a filter named `_includes/acf-pro/settings/show_admin`. The ACF copy the parent bundles applies its settings filters as `acf/settings/<name>`, so nothing applies a filter of that name, and the line changes nothing. ACF's own `show_admin` setting defaults to `true`, so ACF's admin menu shows either way. The tests in `tests/Unit/FunctionsTest.php` pin the registration as it is.
