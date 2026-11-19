@@ -1,10 +1,15 @@
 <?php
-/**
-* Add an automatic default custom taxonomy for calendar.
-* If no event (taxonomy) is set, the event will be sorted as “draft” and won’t return an offset error.
-*/
+
 add_action('acf/input/admin_head', 'my_acf_admin_head');
 
+/**
+ * Print the script and style that move the post editor into an ACF field.
+ *
+ * Runs on acf/input/admin_head, wherever ACF prints its input scripts. The
+ * script moves the editor into the field keyed field_573f70ac9357c, whose
+ * wrapper ACF gives the class acf-field-573f70ac9357c; on a screen without
+ * that field it finds nothing to move.
+ */
 function my_acf_admin_head(): void
 {
 
