@@ -2,7 +2,7 @@
 
 Everything the child theme does, file by file. Anything not listed here comes from the parent theme, `uams-2016`, unchanged.
 
-Written against v1.0.2.
+Written against v1.0.2, without the `show_admin` filter that v1.0.2 still registers and `master` removes for the next release. That filter had no effect: nothing applies a filter of its name.
 
 | File | What it does | How WordPress loads it |
 | --- | --- | --- |
