@@ -3,8 +3,8 @@
 /**
  * my_acf_admin_head(), the ACF admin head callback in functions.php.
  *
- * Pins the markup it prints today, and the filter and action functions.php
- * registers at file scope.
+ * Pins the markup it prints today, the action functions.php registers at file
+ * scope, and the absence of the ACF show_admin filter it used to register.
  *
  * The file is loaded by the first test that needs it, inside that test's Brain
  * Monkey session, so its file-scope lines run under a test and mutation
@@ -18,29 +18,30 @@
 declare(strict_types=1);
 
 /**
- * Load functions.php once, and return the priorities its file scope registered.
+ * Load functions.php once, and return what its file scope registered.
  *
- * @return array{filter: int|false, action: int|false}
+ * @return array{action: int|false, show_admin: bool}
  */
 function load_functions_file(): array
 {
-    /** @var array{filter: int|false, action: int|false}|null $registered */
+    /** @var array{action: int|false, show_admin: bool}|null $registered */
     static $registered = null;
 
     if ($registered === null) {
         require_once dirname(__DIR__, 2).'/functions.php';
 
         $registered = [
-            'filter' => has_filter('_includes/acf-pro/settings/show_admin', '__return_true'),
             'action' => has_action('acf/input/admin_head', 'my_acf_admin_head'),
+            'show_admin' => has_filter('_includes/acf-pro/settings/show_admin')
+                || has_filter('acf/settings/show_admin'),
         ];
     }
 
     return $registered;
 }
 
-it('registers the ACF settings filter and the admin head action at the default priority', function (): void {
-    expect(load_functions_file())->toBe(['filter' => 10, 'action' => 10]);
+it('registers the admin head action at the default priority and no show_admin filter', function (): void {
+    expect(load_functions_file())->toBe(['action' => 10, 'show_admin' => false]);
 });
 
 it('prints the script that moves the post editor into the ACF field', function (): void {

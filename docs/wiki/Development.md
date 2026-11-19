@@ -28,7 +28,7 @@ The suite needs no WordPress install and no database: WordPress functions are mo
 
 | Test file | What it pins |
 | --- | --- |
-| `tests/Unit/FunctionsTest.php` | The markup `my_acf_admin_head()` prints, and the filter and action `functions.php` registers |
+| `tests/Unit/FunctionsTest.php` | The markup `my_acf_admin_head()` prints, the action `functions.php` registers, and that it registers no `show_admin` filter |
 | `tests/Unit/ThinstripTest.php` | The header markup `thinstrip.php` prints |
 
 Before changing code that has no test, add one that captures what it does now; the contributing guide describes the order.
