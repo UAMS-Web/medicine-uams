@@ -98,9 +98,8 @@ $sweepOnlyRules = [
 $neverRules = [];
 
 return RectorConfig::configure()
-    // First-party PHP: the two theme files at the root and the unit tests.
+    // First-party PHP: the theme file at the root and the unit tests.
     ->withPaths([
-        __DIR__.'/functions.php',
         __DIR__.'/thinstrip.php',
         __DIR__.'/tests',
     ])

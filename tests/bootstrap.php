@@ -3,11 +3,7 @@
 /**
  * Unit bootstrap for the theme.
  *
- * Loads Composer's autoloader and Patchwork. No WordPress is loaded, and
- * functions.php is not loaded here: it registers a filter and an action at file
- * scope, and a file loaded before the first test is outside every test's
- * coverage, so mutation testing could not reach those two calls. The tests load
- * it (see tests/Unit/FunctionsTest.php).
+ * Loads Composer's autoloader and Patchwork. No WordPress is loaded.
  */
 
 declare(strict_types=1);

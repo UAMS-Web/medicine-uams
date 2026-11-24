@@ -2,7 +2,7 @@
 
 How to work on the theme: setting up a clone, the Composer scripts, and the checks a pull request runs. The issue-to-merge path (an issue, a branch linked to it, a pull request to `master` with a test plan) is in the [contributing guide](https://github.com/UAMS-Web/medicine-uams/blob/master/CONTRIBUTING.md).
 
-Written against v1.0.2.
+Written against v1.0.2, without the `functions.php` file, its test and its mutation path that v1.0.2 still carries and `master` removes for the next release.
 
 ## Setting up
 
@@ -16,7 +16,7 @@ The suite needs no WordPress install and no database: WordPress functions are mo
 | Script | What it runs |
 | --- | --- |
 | `composer test` | The Pest unit suite in `tests/Unit/` |
-| `composer mutate` | Pest mutation testing over `functions.php` and `thinstrip.php`, naming the two test files |
+| `composer mutate` | Pest mutation testing over `thinstrip.php`, naming its test file |
 | `composer stan` | PHPStan, configured in `phpstan.neon.dist` |
 | `composer test:pint` | Pint in check mode; `composer pint` applies the formatting |
 | `composer test:refactor` | Rector's gating profile as a dry run; `composer refactor` applies it |
@@ -28,7 +28,6 @@ The suite needs no WordPress install and no database: WordPress functions are mo
 
 | Test file | What it pins |
 | --- | --- |
-| `tests/Unit/FunctionsTest.php` | The markup `my_acf_admin_head()` prints, the action `functions.php` registers, and that it registers no `show_admin` filter |
 | `tests/Unit/ThinstripTest.php` | The header markup `thinstrip.php` prints |
 
 Before changing code that has no test, add one that captures what it does now; the contributing guide describes the order.
@@ -41,7 +40,7 @@ A full mutation run also runs weekly on a schedule.
 
 ## What ships
 
-`.gitattributes` keeps the GitHub download to `style.css`, `functions.php`, `thinstrip.php` and `screenshot.png`. A new file the theme runs needs its own `-export-ignore` line in the same change, or it is missing from the download; the download-archive check reports any file that ships and should not.
+`.gitattributes` keeps the GitHub download to `style.css`, `thinstrip.php` and `screenshot.png`. A new file the theme runs needs its own `-export-ignore` line in the same change, or it is missing from the download; the download-archive check reports any file that ships and should not.
 
 ## The wiki
 
