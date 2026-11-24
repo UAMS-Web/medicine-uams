@@ -15,7 +15,7 @@ At the end of this page the College of Medicine theme is the active theme on a W
 ## Steps
 
 1. **Install the parent theme.** Put the [`uams-2016`](https://github.com/UAMS-Web/uams-2016) theme in `wp-content/themes/uams-2016/`.
-2. **Get this theme.** Either download the source archive of a [release](https://github.com/UAMS-Web/medicine-uams/releases) and unpack it, or clone the repository. The release download holds only what the theme runs (`style.css`, `functions.php`, `thinstrip.php` and `screenshot.png`); a clone also carries the tests, tooling and agent files.
+2. **Get this theme.** Either download the source archive of a [release](https://github.com/UAMS-Web/medicine-uams/releases) and unpack it, or clone the repository. The release download holds only what the theme runs (`style.css`, `thinstrip.php` and `screenshot.png`; v1.0.2 also holds `functions.php`); a clone also carries the tests, tooling and agent files.
 3. **Put it in the themes folder**, for example `wp-content/themes/medicine-uams/`.
 4. **Activate it.** In the WordPress admin, open *Appearance*, *Themes*. The theme is listed as **Snoqualmie Falls**; choose *Activate*.
 5. **Check the header.** Load any page: the header reads *College of Medicine* above the site title, with the UAMSHealth, Jobs and Giving links on the right. [What the theme changes](What-the-theme-changes.md) describes the header in full.

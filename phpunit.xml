@@ -18,7 +18,6 @@
     </testsuites>
     <source>
         <include>
-            <file>./functions.php</file>
             <file>./thinstrip.php</file>
         </include>
     </source>

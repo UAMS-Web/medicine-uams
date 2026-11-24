@@ -61,7 +61,7 @@ jobs:
     uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@v0.17.0
     with:
       linux-only: true
-      mutate-paths: functions.php thinstrip.php
+      mutate-paths: thinstrip.php
       floor-lint: true
       floor-lint-php: '8.2'
       floor-lint-command: find . -name '*.php' -not -path './vendor/*' -not -path './tests/*' -print0 | xargs -0 -n1 php -l
